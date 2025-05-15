@@ -1,0 +1,32 @@
+.pres{
+    display: flex;
+    margin-top: 100px;
+    margin-left: 180px;
+    margin-right: 180px;
+    height: 220px;
+    justify-content: center;
+    justify-content: space-between;
+    box-shadow: 0px .5px 0px rgb(173, 173, 173);
+}
+.pres img{
+    width: 220px;
+    height: 50px;
+}
+.pres h2{
+    font-size: 22px;
+    font-weight: 500;
+}
+.pres p{
+    font-size: 13px;
+    opacity: 90%;
+}
+.pres-l p{
+    font-size: 13px;
+    opacity: 90%;
+    line-height: 30px;
+}
+.end{
+    margin-left: 180px;
+    margin-right: 180px;
+    text-align: center;
+}

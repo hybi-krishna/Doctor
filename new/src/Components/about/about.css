@@ -1,0 +1,62 @@
+.aboutus{
+    margin-left: 150px;
+    margin-right: 150px;
+    margin-top: 50px;
+}
+.us{
+    text-align: center;
+    font-size: 17px;
+}
+.us span{
+    color: rgb(121, 121, 121);
+    font-weight: 400;
+}
+.a-first{
+    margin-top: 50px;
+    display: flex;
+    gap: 50px;
+
+}
+.a-first img{
+    width: 360px;
+    height: 366px;
+}
+.a-first p{
+    font-size: 14px;
+    line-height: 23px;
+    color: rgb(78, 77, 77);
+}
+.a-para{
+    flex-direction: column;
+    gap: 10px;
+}
+.choose{
+    margin-top: 40px;
+    font-size: 21px;
+}
+.choose span{
+    font-weight: 600;
+    color: rgb(78, 77, 77);
+}
+.a-three{
+    display: flex;
+    color: rgb(78, 77, 77);
+}
+
+.a-three div{
+    border: 1px solid rgb(215, 214, 214);
+    padding: 4rem;
+    transition: .5s ease;
+}
+.a-three div:hover{
+    /* background-color: rgb(105, 105, 255); */
+    background-color: rgb(61, 212, 189);
+    /* background-color: rgb(144, 61, 212); */
+    color: white;
+}
+.a-three span {
+    font-weight: 700;
+}
+.a-three p{
+    font-size: 14px;
+}

@@ -1,0 +1,80 @@
+.ap-dash{
+    width: 100%;
+    background-color: rgb(245, 246, 251);
+    padding-left: 20px;
+}
+
+.ap-dash h3{
+    font-weight: 500;
+}
+
+.add-up{
+    background-color: white;
+    width: 900px;
+    padding: 32px;
+    color: rgb(88, 88, 88);
+    border: .5px solid rgb(215, 215, 215);
+    border-radius: 3px;
+    overflow-y: scroll;
+    overflow: hidden;
+    height: 500px;
+}
+.add-up2{
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    height: 500px;
+}
+.add-up img{
+    background-color: #F3F4F6;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    
+}
+.up-img{
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.add-form{
+    display: flex;
+    justify-content: space-between;
+}
+.form-box{
+    width: 395px;
+    height: 42px;
+    border-radius: 3px;
+    border: .5px solid rgb(204, 204, 204);
+    margin-top: 5px;
+}
+.form-left{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.form-right{
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+}
+.add-up h5{
+    margin-bottom: 0;
+}
+.about-form{
+    width: 895px;
+}
+.ad-but{
+    width: 160px;
+    height: 49px;
+    border-radius: 50px;
+    /* background-color: rgb(105, 105, 255); */
+    background-color: rgb(61, 212, 189);
+    /* background-color: rgb(144, 61, 212); */
+    border: none;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+

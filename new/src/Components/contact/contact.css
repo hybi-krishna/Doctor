@@ -1,0 +1,53 @@
+.contactus{
+    margin-left: 150px;
+    margin-right: 150px;
+}
+.cont{
+    text-align: center;
+    margin-top: 70px;
+}
+.cont span{
+    font-weight: 500;
+    color: rgb(116, 115, 115);
+     
+}
+.c-mid{
+    margin-top: 40px;
+    margin-bottom: 200px;
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+
+}
+.c-mid img{
+    width: 360px;
+    height: 360px;
+}
+.c-right{
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    justify-content: center;
+}
+.c-right h4{
+    color: rgb(78, 77, 77);
+    margin: 0;
+    font-size: 18px;
+
+}
+.c-right p{
+    font-size: 14px;
+    color: rgb(78, 77, 77);
+    margin: 0;
+}
+.c-right button{
+    width: 150px;
+    height: 55px;
+    background-color: white;
+    border-width: 1px;
+    transition: .5s ease;
+}
+.c-right button:hover{
+    background-color: black;
+    color: white;
+}
