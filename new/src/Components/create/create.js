@@ -5,7 +5,7 @@ import axios from "axios";
 
 
 const Create = () =>{
-    const [fullname, setFull_name] = useState("");
+    const [full_name, setFullname] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     // const [setLoading] = useState(false); // Add loading state
@@ -16,7 +16,7 @@ const Create = () =>{
 
     try {
       const res = await axios.post("http://localhost:5000/create", { 
-        fullname, 
+        full_name, 
         email, 
         password 
       });
@@ -29,7 +29,7 @@ const Create = () =>{
       }
 
       // ✅ Clear input fields after successful registration
-      setFull_name("");
+      setFullname("");
       setEmail("");
       setPassword("");
     } catch (err) {
@@ -49,7 +49,7 @@ const Create = () =>{
                     <form onSubmit={handleSubmit}>
                     <div>
                         <p>Full Name</p>
-                        <input className="ca-fill" type="text" value={fullname} onChange={(e) => setFull_name(e.target.value)} required></input>
+                        <input className="ca-fill" type="text" value={full_name} onChange={(e) => setFullname(e.target.value)} required></input>
                     </div>
                     <div> 
                         <p>Email</p>

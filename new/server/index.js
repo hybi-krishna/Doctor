@@ -61,13 +61,15 @@ const storage = multer.diskStorage({
 
 // ✅ User Schema & Model
 const UserSchema = new mongoose.Schema({
-    full_name: { type: String, required: true },
+    fullname: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    role:String,
     phone: String,
     address: String,
     gender: String,
     birthday: String,
+
 });
 
 const User = mongoose.model("User", UserSchema);
@@ -77,9 +79,9 @@ const Adminuser = mongoose.model("Adminuser", UserSchema);
 app.post("/create", async (req, res) => {
     try {
         console.log("Receve Data:", req.body);
-        const { full_name, email, password } = req.body;
+        const { fullname, email, password } = req.body;
 
-        if (!full_name || !email || !password) {
+        if (!fullname || !email || !password) {
             return res.status(400).json({ error: "All fields are required" });
         }
         // Check if user already exists
@@ -89,7 +91,7 @@ app.post("/create", async (req, res) => {
         }
         // Hash password and save new user
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ full_name, email, password: hashedPassword });
+        const user = new User({ fullname, email, password: hashedPassword });
 
         await user.save();
         res.status(201).json({ message: "User registered successfully" });
@@ -129,12 +131,12 @@ app.get("/api/users/:id", async (req, res) => {
     }
 
     // Fetch user from database
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id); 
     if (!user) return res.status(404).json({ message: "User not found" });
 
     res.json(user);
   } catch (error) {
-    console.error("Fetch error:", error);
+    // console.error("Fetch error:", error);
     res.status(500).json({ message: "Failed to fetch user" });
   }
 });
@@ -155,6 +157,18 @@ app.put("/api/users/:id", async (req, res) => {
     res.status(500).json({ message: "Failed to update user" });
   }
 });
+
+//to fetch doctor details
+app.get("/api/doctors/:id",async (req,res)=>{
+  try{
+    const doctor = await Doctor.findById(req.params.id);
+    if (!doctor) return res.status(404).json({message: "Doctor not found"})
+    res.json(doctor)
+  }
+  catch(error){
+    res.status(500).json({message: "Failed to fetch doctors"})
+  }
+})
 
 
 app.get("/api/doctors", async (req, res) => {
@@ -232,9 +246,9 @@ app.post("/login", async (req, res) => {
         const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
 
         // res.json({ message: "Login successful", token });
-        res.json({ message: "Login successful", token, user: { _id: user._id, full_name: user.full_name, email: user.email } });
+        res.json({ message: "Login successful", token, user: { _id: user._id, fullname: user.fullname, email: user.email } });
         // Store the token in localStorage after login
-        localStorage.setItem('token', response.data.token);
+        // localStorage.setItem('token', response.data.token);
 
     } catch (error) {
         console.error("Login Error:", error);
@@ -283,9 +297,13 @@ app.post("/adminlogin", async (req, res) => {
     if (!user) return res.status(400).json({ error: "User not found" });
 
     // Direct comparison (plain text - for dev only)
-    if (password !== user.password) {
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword){
       return res.status(400).json({ error: "Invalid credentials" });
-    }
+  }
+    // if (password !== user.password) {
+    //   return res.status(400).json({ error: "Invalid credentials" });
+    // }
 
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
 
@@ -295,6 +313,10 @@ app.post("/adminlogin", async (req, res) => {
     res.status(500).json({ error: "Server error. Try again later." });
   }
 });
+
+
+
+
 
 
 

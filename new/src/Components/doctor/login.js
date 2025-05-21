@@ -14,7 +14,7 @@ const Login = ({ setIsAuthenticated }) => {
       const res = await axios.post("http://localhost:5000/login", { email, password });
       alert(res.data.message);
       localStorage.setItem("token", res.data.token);
-      // localStorage.setItem("userId", res.data.users._id);
+      
       localStorage.setItem("userId", res.data.user._id);
 
       

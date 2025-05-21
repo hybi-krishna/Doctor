@@ -12,6 +12,7 @@ const Top = ({ isAuthenticated, setIsAuthenticated }) => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     setShowDropdown(false); // Close the dropdown after logout
+    window.location.href = '/login';
   };
 
   const toggleDropdown = () => {

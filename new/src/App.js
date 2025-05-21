@@ -40,7 +40,7 @@ function Appad() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/create" element={<Create />} />
         <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
-        <Route path="/singledoc" element={<Singledoc />} />
+        <Route path="/singledoc/:id" element={<Singledoc />} />
         <Route path="/admin" element={<Admin setIsAuthenticated={setIsAuthenticated}/>} />
         <Route path="/adminlogin" element={<Adminlogin setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/doclogin" element={<Doclogin />} />

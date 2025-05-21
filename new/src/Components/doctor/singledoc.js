@@ -1,5 +1,7 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import "./singledoc.css";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 import p1 from "../assets/p1.png";
 import p7 from "../assets/p7.png";
 import p13 from "../assets/p13.png";
@@ -8,12 +10,24 @@ import i from "../assets/i.svg";
 
 
 const Singledoc = () =>{
+    const { id } = useParams();
+    const [doctor, setDoctor] = useState(null);
+        
+        useEffect(() => {
+            axios.get(`${process.env.REACT_APP_BASE_URL}/api/doctors/${id}`)
+              .then((res) => {
+                setDoctor(res.data);
+              })
+              .catch((err) => {
+                console.error("Error fetching doctors:", err);
+              });
+          }, [id]);
 
     const[activeDay,setActiveDay]=useState("mon");
     const[selectTime,setSelectTime]=useState("");
 
     const days=["mon","tue","wed","thu","fry","sat","sun"]
-    const timeSlot =["9:00 AM","10:00 AM","11:00 AM","12:00 PM,1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"];
+    const timeSlot =["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM"];
     const handleDayclick = (day) =>{
         setActiveDay(day);
         setSelectTime(""); //reset time when day change
@@ -22,18 +36,27 @@ const Singledoc = () =>{
         setSelectTime(time)
     }
     
-
+    if (!doctor) return <p>Loading doctor info</p>
     return(
         <header>
             <div className="single-main">
+                
                 <div className="sin-main-top">
                     <div className="sin-left">
-                        <img src={p1}alt=""></img>
+                        <img 
+                        src={
+                            doctor.photo
+                            ? `http://localhost:5000/${doctor.photo.replace(/\\/g, "/")}`
+                            : "https://via.placeholder.com/100"
+                        }
+                        alt={doctor.name}>
+
+                        </img>
                     </div>
                     <div className="sin-right">
                         <div className="single-box">
                             <div className="s-richard ">
-                                <h1>Dr. Richard James</h1>
+                                <h1>Dr.{doctor.name}</h1>
                                 <img src={vtick}alt=""></img>
                             </div>
                             <div className="s-mbbs">
@@ -58,497 +81,32 @@ const Singledoc = () =>{
                         <div className="weeks">
 
                             {days.map((day)=>(
-                                
+                                <div
+                                    key={day}
+                                    className={`daybut ${activeDay === day ? 'day-clicked' : ''}`}
+                                    onClick={() => handleDayclick(day)}
+                                    >
+                                        <p>{day}</p>
+                                </div>
+
                             ))}
-
-
-
-                            <div onClick={handleMonClick} className={`daybut ${monButtonClicked ? 'day-clicked' : ''}`}>
-                                <p>TUE</p>
-                                <p>28</p>
-                            </div>
-                            <div onClick={handleTueClick} className={`daybut ${tueButtonClicked ? 'day-clicked' : ''}`}>
-                                <p>WED</p>
-                                <p>29</p>
-                            </div>
-                            <div onClick={handleWedClick} className={`daybut ${wedButtonClicked ? 'day-clicked' : ''}`}>
-                                <p>THU</p>
-                                <p>30</p>
-                            </div>
-                            <div onClick={handleThuClick} className={`daybut ${thuButtonClicked ? 'day-clicked' : ''}`}>
-                                <p>FRI</p>
-                                <p>31</p>
-                            </div>
-                            <div onClick={handleFryClick} className={`daybut ${fryButtonClicked ? 'day-clicked' : ''}`}>
-                                <p>SAT</p>
-                                <p>1</p>
-                            </div>
-                            <div onClick={handleSatClick} className={`daybut ${satButtonClicked ? 'day-clicked' : ''}`}>
-                                <p>SUN</p>
-                                <p>2</p>
-                            </div>
-                            <div onClick={handleSunClick} className={`daybut ${sunButtonClicked ? 'day-clicked' : ''}`}>
-                                <p>MON</p>
-                                <p>3</p>
-                            </div>
                         </div>
-                        <div className={`times-1 ${isMonVisible || isTueVisible || isWedVisible || isThuVisible || isFryVisible || isSatVisible || isSunVisible ? "hidden" : ""}`}>
 
                     {/* monday */}
-                        {isMonVisible &&(
+                        
                         <div className="times">
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
+                            {timeSlot.map((time)=>(
+                                <div
+                                    key={time}
+                                    className={`time1 ${selectTime === time ? 'day-clicked' : ''}`}
+                                    onClick={() => handleTimeClick(time)}
+                                    >
+                                        <p>{time}</p>
+                                </div>
+                            ))}
+                            
                         </div>
-                        )}
-                        {/* tuesday */}
-                        {isTueVisible &&(
-                        <div className="times">
-                            <div>
-                                <p>10:00 am</p>
-                            </div>
-                            <div>
-                                <p>10:00 am</p>
-                            </div>
-                            <div>
-                                <p>10:00 am</p>
-                            </div>
-                            <div>
-                                <p>10:00 am</p>
-                            </div>
-                            <div>
-                                <p>10:00 am</p>
-                            </div>
-                            <div>
-                                <p>10:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                        </div>
-                        )}
-                        {/* wednesday */}
-                        {isWedVisible &&(
-                        <div className="times">
-                            <div>
-                                <p>12:00 am</p>
-                            </div>
-                            <div>
-                                <p>12:00 am</p>
-                            </div>
-                            <div>
-                                <p>12:00 am</p>
-                            </div>
-                            <div>
-                                <p>12:00 am</p>
-                            </div>
-                            <div>
-                                <p>12:00 am</p>
-                            </div>
-                            <div>
-                                <p>12:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                        </div>
-                        )}
-                        {/* thursday */}
-                        {isThuVisible &&(
-                        <div className="times">
-                            <div>
-                                <p>1:00 am</p>
-                            </div>
-                            <div>
-                                <p>1:00 am</p>
-                            </div>
-                            <div>
-                                <p>1:00 am</p>
-                            </div>
-                            <div>
-                                <p>1:00 am</p>
-                            </div>
-                            <div>
-                                <p>1:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                        </div>
-                        )}
-                        {/* friday */}
-                        {isFryVisible &&(
-                        <div className="times">
-                            <div>
-                                <p>2:00 am</p>
-                            </div>
-                            <div>
-                                <p>2:00 am</p>
-                            </div>
-                            <div>
-                                <p>2:00 am</p>
-                            </div>
-                            <div>
-                                <p>2:00 am</p>
-                            </div>
-                            <div>
-                                <p>2:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                        </div>
-                        )}
-                        {/* saturday */}
-                        {isSatVisible &&(
-                        <div className="times">
-                            <div>
-                                <p>3:00 am</p>
-                            </div>
-                            <div>
-                                <p>3:00 am</p>
-                            </div>
-                            <div>
-                                <p>3:00 am</p>
-                            </div>
-                            <div>
-                                <p>3:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                        </div>
-                        )}
-                        {/* sunday */}
-                        {isSunVisible &&(
-                        <div className="times">
-                            <div>
-                                <p>4:00 am</p>
-                            </div>
-                            <div>
-                                <p>4:00 am</p>
-                            </div>
-                            <div>
-                                <p>4:00 am</p>
-                            </div>
-                            <div>
-                                <p>4:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                            <div>
-                                <p>11:00 am</p>
-                            </div>
-                        </div>
-                        )}
+                        
 
 
                         </div>
@@ -557,9 +115,10 @@ const Singledoc = () =>{
                     </div>    
                     </div>
                     </div>
+
                     
                 </div>
-                <div className="related-doc">
+                {/* <div className="related-doc">
                         <h1>Related Doctors</h1>
                         <p>Simply browse through our extensive list of trusted doctors.</p>
                         <div className="rel-doc">
@@ -580,9 +139,9 @@ const Singledoc = () =>{
                                 </div>
                             </div>            
                         </div>
-                </div>
+                </div> */}
                 
-            </div>
+            
         </header>
     )
 }

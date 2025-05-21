@@ -1,5 +1,6 @@
 import React, {useEffect, useState } from "react";
 import './alldoc.css';
+import { Link } from "react-router-dom";
 import axios from "axios";
 import p1 from '../assets/p1.png';
 import p2 from '../assets/p2.png';
@@ -16,6 +17,7 @@ import p12 from '../assets/p12.png';
 import p13 from '../assets/p13.png';
 import p14 from '../assets/p14.png';
 import p15 from '../assets/p15.png';
+import Singledoc from "../doctor/singledoc";
 
 const Alldoc = () => {
 
@@ -24,7 +26,7 @@ const Alldoc = () => {
     const [selectedSpeciality, setSelectedSpeciality] = useState(null);
     useEffect(() => {
         axios
-          .get("http://localhost:5000/api/doctors")
+          .get(`${process.env.REACT_APP_BASE_URL}/api/doctors`)
           .then((res) => {
             setDoctors(res.data);
           })
@@ -204,6 +206,7 @@ const Alldoc = () => {
                 <div className="gp">
           <div className="all-row">
             {filteredDoctors.map((doctor) => (
+              <Link  to={`/singledoc/${doctor._id}`}>
               <div key={doctor._id} className="all-row-1">
                 <img
                   src={
@@ -221,6 +224,7 @@ const Alldoc = () => {
                   <p>{doctor.speciality}</p>
                 </div>
               </div>
+              </Link>
             ))}
           </div>
         </div>

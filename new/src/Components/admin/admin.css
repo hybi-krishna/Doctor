@@ -196,6 +196,7 @@
 .doc-data{
     padding: 16px;
     margin-bottom: 0;
+    z-index: 1;
 }
 .doc-data p{
     margin: 0;
@@ -255,4 +256,8 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     height: 700px;
+}
+.edit-form{
+    z-index: 10;
+    position: relative;
 }

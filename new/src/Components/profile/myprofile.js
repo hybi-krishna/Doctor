@@ -20,27 +20,58 @@ const Myprofile=()=>{
     const userId = localStorage.getItem("userId"); 
 
     console.log("userId:", userId);
-
     useEffect(() => {
-        const token = localStorage.getItem("token");  // Get token from localStorage
-        const userId = localStorage.getItem("userId");  // Get userId from localStorage
-        if (!userId || !token) {
-            navigate("/login");
+    const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId");
+
+    if (!userId || !token) {
+        navigate("/login");
         return;
-        }
-        console.log("userId from localStorage:", userId);
-        axios
-        .get(`http://localhost:5000/api/users/${userId}`,{
-            headers: {
-                Authorization: `Bearer ${token}`  // Include token in headers
-              }
+    }
+
+    axios
+        .get(`http://localhost:5000/api/users/${userId}`, {
+        headers: {
+        Authorization: `Bearer ${token}`,
+        },
         })
         .then((res) => {
-            console.log("Fetched data:", res.data);
-            setForm(res.data);
-        })
-        .catch((err) => console.log(err));
-    }, [userId,navigate]);
+        const data = res.data;
+
+      // Normalize all fields to ensure no undefined/null
+      setForm({
+        full_name: data.full_name || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        address: data.address || "",
+        gender: data.gender || "",
+        birthday: data.birthday || "",
+      });
+    })
+    .catch((err) => console.log(err));
+    }, [userId, navigate]);
+
+
+    // useEffect(() => {
+    //     const token = localStorage.getItem("token");  // Get token from localStorage
+    //     const userId = localStorage.getItem("userId");  // Get userId from localStorage
+    //     if (!userId || !token) {
+    //         navigate("/login");
+    //     return;
+    //     }
+    //     console.log("userId from localStorage:", userId);
+    //     axios
+    //     .get(`http://localhost:5000/api/users/${userId}`,{
+    //         headers: {
+    //             Authorization: `Bearer ${token}`  // Include token in headers
+    //           }
+    //     })
+    //     .then((res) => {
+    //         console.log("Fetched data:", res.data);
+    //         setForm(res.data);
+    //     })
+    //     .catch((err) => console.log(err));
+    // }, [userId,navigate]);
 
     const handleChange = (e) => {
          setForm({ ...form, [e.target.name]: e.target.value });
@@ -70,7 +101,7 @@ const Myprofile=()=>{
                 {editMode ?(
                     <input 
                         type="text"
-                        name="full_name"
+                        name="fullname"
                         value={form.full_name}
                         onChange={handleChange}
                         placeholder="fullname"
