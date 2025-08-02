@@ -1,4 +1,5 @@
-import React,{useState} from "react";
+import React,{useEffect,useState} from "react";
+import axios from "axios";
 import './home.css';
 import { Link } from "react-router-dom";
 
@@ -33,6 +34,23 @@ const handleGpClick = () => {
     setIsGpVisible(true);
     setGpButtonClicked(true);
 };
+
+const [doctors, setDoctors] = useState([]);
+
+    useEffect(() => {
+        axios
+          .get(`${process.env.REACT_APP_BASE_URL}/api/doctors`)
+          .then((res) => { 
+            setDoctors(res.data);
+          })
+          .catch((err) => {
+            console.error("Error fetching doctors:", err);
+          });
+      }, []);
+    
+      
+
+
 
 
 
@@ -98,93 +116,33 @@ const handleGpClick = () => {
                 </div>
                 
                 <div className="row">
-                    <Link to="/singledoc">
-                    <div className="row-1">
-                        <img src={p1}alt=""/>
-                        <div>
-                        <h4><span>.....</span>    Available</h4>
-                        <h3>Dr. Richard James</h3>
-                        <p>General physician</p>
-                        </div>
-                    </div>
-                    </Link>
-                    <div className="row-1">
-                        <img src={p2}alt=""/>
-                        <div>
-                        <h4><span>.....</span>    Available</h4>
-                        <h3>Dr. Emily Larson</h3>
-                        <p>Gynecologist</p>
-                        </div>
-                    </div>
-                    <div className="row-1">
-                        <img src={p3}alt=""/>
-                        <div>
-                        <h4><span>.....</span>     Available</h4>
-                        <h3>Dr. Sarah Patel</h3>
-                        <p>Dermatologist</p>
-                        </div>
-                    </div>
-                    <div className="row-1">
-                        <img src={p4}alt=""/>
-                        <div>
-                        <h4><span>.....</span>     Available</h4>
-                        <h3>Dr. Christopher Lee</h3>
-                        <p>Pediatricians</p>
-                        </div>
-                    </div>
-                    <div className="row-1">
-                        <img src={p5}alt=""/>
-                        <div>
-                        <h4><span>.....</span>     Available</h4>
-                        <h3>Dr. Jennifer Garcia</h3>
-                        <p>Neurologist</p>
-                        </div>
-                    </div>
+                    <div className="homeall-row">
+                                {doctors.map((doctor) => (
+                                  <Link  to={`/singledoc/${doctor._id}`}>
+                                  <div key={doctor._id} className="homerow-1">
+                                    <img
+                                      src={
+                                        doctor.photo
+                                          ? `http://localhost:5000/${doctor.photo.replace(/\\/g, "/")}`
+                                          : "https://via.placeholder.com/100"
+                                      }
+                                      alt={doctor.name}
+                                    />
+                                    <div>
+                                      <h4>
+                                        <span>.....</span> Available
+                                      </h4>
+                                      <h3>Dr. {doctor.name}</h3>
+                                      <p>{doctor.speciality}</p>
+                                    </div>
+                                  </div>
+                                  </Link>
+                                ))}
+                              </div>
+                
 
                 </div>
-                <div className="row">
-                    <div className="row-1">
-                        <img src={p6}alt=""/>
-                        <div>
-                        <h4><span>.....</span>    Available</h4>
-                        <h3>Dr. Andrew Williams</h3>
-                        <p>Gastroenterologist</p>
-                        </div>
-                    </div>
-                    <div className="row-1">
-                        <img src={p7}alt=""/>
-                        <div>
-                        <h4><span>.....</span>    Available</h4>
-                        <h3>Dr. Christopher Davis</h3>
-                        <p>General physician</p>
-                        </div>
-                    </div>
-                    <div className="row-1">
-                        <img src={p8}alt=""/>
-                        <div>
-                        <h4><span>.....</span>     Available</h4>
-                        <h3>Dr. Timothy White</h3>
-                        <p>Gynecologist</p>
-                        </div>
-                    </div>
-                    <div className="row-1">
-                        <img src={p9}alt=""/>
-                        <div>
-                        <h4><span>.....</span>     Available</h4>
-                        <h3>Dr. Ava Mitchell</h3>
-                        <p>Dermatologist</p>
-                        </div>
-                    </div>
-                    <div className="row-1">
-                        <img src={p10}alt=""/>
-                        <div>
-                        <h4><span>.....</span>     Available</h4>
-                        <h3>Dr. Jeffrey King</h3>
-                        <p>Pediatricians</p>
-                        </div>
-                    </div>
-
-                </div>
+                
                 <Link to="/alldoc"><button className="more">more</button></Link>
                 
             </div>

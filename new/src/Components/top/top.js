@@ -39,12 +39,10 @@ const Top = ({ isAuthenticated, setIsAuthenticated }) => {
           {isAuthenticated ? (
             <div className="user-menu">
               <img src={profilepic}alt='' className="user-icon" title="Profile"  onClick={toggleDropdown}></img>
-              {/* <FaUserCircle size={30} title="Profile" onClick={toggleDropdown} className="user-icon" /> */}
               {showDropdown && (
                 <div className="dropdown-menu">
                   <div className='myprofile'><Link to="/myprofile">My Profile</Link></div>
-                  <div className='myprofile'><Link to="/">My Appointments</Link></div>
-                  {/* <p><Link to="/">My Appointments</Link></p> */}
+                  <div className='myprofile'><Link to="/myappointments">My Appointments</Link></div>
                   <button onClick={handleLogout}>Logout</button>
                 </div>
               )}

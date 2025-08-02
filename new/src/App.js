@@ -14,6 +14,7 @@ import Singledoc from "./Components/doctor/singledoc";
 import Adminlogin from "./Components/admin/adminlogin";
 import Doclogin from "./Components/doctor/doclogin";
 import Myprofile from "./Components/profile/myprofile";
+import Myappointments from "./Components/doctor/myappointments";
 
 function Appad() {
   const location = useLocation();
@@ -45,6 +46,7 @@ function Appad() {
         <Route path="/adminlogin" element={<Adminlogin setIsAuthenticated={setIsAuthenticated} />} />
         <Route path="/doclogin" element={<Doclogin />} />
         <Route path="/myprofile" element={<Myprofile />} />
+        <Route path="/myappointments" element={<Myappointments/>}/>
       </Routes>
 
       {!hideNavbarFooter && <Foot />}

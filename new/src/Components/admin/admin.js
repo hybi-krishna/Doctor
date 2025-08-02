@@ -12,22 +12,7 @@ import Adddoctor from './adddoctor.js';
 import axios from "axios";
 
 
-import p1 from '../assets/p1.png'
-import p2 from '../assets/p2.png'
-import p3 from '../assets/p3.png'
-import p4 from '../assets/p4.png'
-import p5 from '../assets/p5.png'
-import p6 from '../assets/p6.png'
-import p7 from '../assets/p7.png'
-import p8 from '../assets/p8.png'
-import p9 from '../assets/p2.png'
-import p10 from '../assets/p10.png'
-import p11 from '../assets/p11.png';
-import p12 from '../assets/p12.png';
-import p13 from '../assets/p13.png';
-import p14 from '../assets/p14.png';
-import p15 from '../assets/p15.png';
-import { Link } from "react-router-dom";
+
 
 const Admin = ({setIsAuthenticated }) =>{
 
@@ -158,6 +143,34 @@ const Admin = ({setIsAuthenticated }) =>{
       navigate("/adminlogin");
     };
       
+    const[adappo,setAdappo]=useState([]);
+    useEffect(() => {
+
+    axios
+      .get("http://localhost:5000/api/adappointments")
+      .then((res) => {
+        setAdappo(res.data);
+        console.log("Fetching appointments for user:");
+
+      })
+      .catch((err) => {
+        console.error("Error fetching appointments:", err);
+      });
+  }, []); 
+
+  const cancelClick = async (id) => {
+          if (!window.confirm("Are you sure you want to cancel this appointment?")) return;
+      
+          try {
+            await axios.delete(`http://localhost:5000/api/cancel-appointment/${id}`);
+            alert("appointment cancelled successfully");
+            window.location.reload();
+  
+            
+          } catch (err) {
+            alert("Error canceling appointment: " + err.message);
+          }
+        };
 
 
     return(
@@ -165,10 +178,13 @@ const Admin = ({setIsAuthenticated }) =>{
             <div className="ap-nav">
                 <div>
                     <img src={healthmate} alt=""></img>
-                    <p>Admin</p>
+                    <div className="smallad">
+                      <p>Admin</p>
+                    </div>
+                    
                 </div>
                 <button onClick={handleAdminlogout}>Logout</button>
-                {/* <Link to="/adminlogin"><button>Logout</button></Link> */}
+               
                 
             </div>
             <div className="ap-main">
@@ -202,15 +218,42 @@ const Admin = ({setIsAuthenticated }) =>{
                     <div className="ap-dash">
                         <div>
                             <h3>All Appointments</h3>
-                            <div className="appoint">
-                                <p className="a-hash">#</p>
-                                <p className="a-pat">Patient</p>
-                                <p className="a-age">Age</p>
-                                <p className="a-time">Date & Time</p>
-                                <p className="a-doc">Doctor</p>
-                                <p className="a-fee">Fees</p>
-                                <p className="a-act">Action</p>
-                             </div>
+                            
+                              <table class="table table-striped table-hover">
+                                  <thead>
+                                    <tr>
+                                      <th scope="col">#</th>
+                                      <th scope="col">Patient</th>
+                                      <th scope="col">Age</th>
+                                      <th scope="col">Date & Time</th>
+                                      <th scope="col">Doctor</th>
+                                      <th scope="col">Fees</th>
+                                      <th scope="col">Action</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    
+                                  {adappo.map((appt,index) => (
+                                    <tr key={appt._id}>
+                                      <th scope="row">{index + 1}</th>
+                                      <td>{appt.userId?.full_name}</td>
+                                      <td>{appt.userId?.birthday}</td>
+                                      <td>{appt.day} - {appt.time}</td>
+                                      <td>{appt.doctorId?.name}</td>
+                                      <td>{appt.doctorId?.fees}</td>
+                                      <td>
+                                        <i class="fa-solid fa-xmark"onClick={() => cancelClick (appt._id)}></i>
+                                        {/* <button onClick={() => cancelClick (appt._id)}>Cancel Appointment</button> */}
+                                        </td>
+                                    </tr>
+            
+          
+                          ))}
+    
+                                  </tbody>
+                                </table>
+                          
+                             
                         </div>
                     </div>
                     
@@ -309,140 +352,10 @@ const Admin = ({setIsAuthenticated }) =>{
                     </div>
                   ))}
 
-
-
-                                            {/* <div className="ap-row-1">
-                                                <img src={p1}alt=""/>
-                                                <div>
-                                                
-                                                <h3>Dr. Richard James</h3>
-                                                <p>General physician</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                
-                                                </div>
-                                            </div>
-                                            <div className="ap-row-1">
-                                                <img src={p2}alt=""/>
-                                                <div>
-                                                <h3>Dr. Emily Larson</h3>
-                                                <p>Gynecologist</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div>
-                                            <div className="ap-row-1">
-                                                <img src={p3}alt=""/>
-                                                <div>
-                                                <h3>Dr. Sarah Patel</h3>
-                                                <p>Dermatologist</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div>
-                                            <div className="ap-row-1">
-                                                <img src={p4}alt=""/>
-                                                <div>
-                                                <h3>Dr. Christopher Lee</h3>
-                                                <p>Pediatricians</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div>
-                                            <div className="ap-row-1">
-                                                <img src={p5}alt=""/>
-                                                <div>
-                                                <h3>Dr. Jennifer Garcia</h3>
-                                                <p>Neurologist</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div> */}
                         
-                                        </div>
-                                        {/* <div className="ap-row">
-                                            <div className="ap-row-1">
-                                                <img src={p6}alt=""/>
-                                                <div>
-                                                <h3>Dr. Andrew Williams</h3>
-                                                <p>Gastroenterologist</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div>
-                                            <div className="ap-row-1">
-                                                <img src={p7}alt=""/>
-                                                <div>
-                                                <h3>Dr. Christopher Davis</h3>
-                                                <p>General physician</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div>
-                                            <div className="ap-row-1">
-                                                <img src={p8}alt=""/>
-                                                <div>
-                                                <h3>Dr. Timothy White</h3>
-                                                <p>Gynecologist</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div>
-                                            <div className="ap-row-1">
-                                                <img src={p9}alt=""/>
-                                                <div>
-                                                <h3>Dr. Ava Mitchell</h3>
-                                                <p>Dermatologist</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div>
-                                            <div className="ap-row-1">
-                                                <img src={p10}alt=""/>
-                                                <div>
-                                                <h3>Dr. Jeffrey King</h3>
-                                                <p>Pediatricians</p>
-                                                <input type="checkbox"></input><label>Available</label>
-                                                </div>
-                                            </div>
-                                            </div> */}
-
-                                            {/* <div className="ap-row">
-
-                                                    <div className="ap-row-1">
-                                                                        <img src={p11}alt=""/>
-                                                                        <div>
-                                                                        <h3>Dr. Zoe Kelly</h3>
-                                                                        <p>Neurologist</p>
-                                                                        <input type="checkbox"></input><label>Available</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="ap-row-1">
-                                                                        <img src={p12}alt=""/>
-                                                                        <div>
-                                                                        <h3>Dr. Patrick Harris</h3>
-                                                                        <p>Gastroenterologist</p>
-                                                                        <input type="checkbox"></input><label>Available</label>
-                                                                        </div>
-                                                                    </div>
-                                                                
-                                                                
-                                                                    <div className="ap-row-1">
-                                                                        <img src={p13}alt=""/>
-                                                                        <div>
-                                                                        <h3>Dr. Chloe Evans</h3>
-                                                                        <p>General physician</p>
-                                                                        <input type="checkbox"></input><label>Available</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="ap-row-1">
-                                                                        <img src={p14}alt=""/>
-                                                                        <div>
-                                                                        <h3>Dr. Ryan Martinez</h3>
-                                                                        <p>Gynecologist</p>
-                                                                        <input type="checkbox"></input><label>Available</label>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className="ap-row-1">
-                                                                        <img src={p15} alt=""/>
-                                                                        <div>
-                                                                        <h3>Dr. Amelia Hill</h3>
-                                                                        <p>Dermatologist</p>
-                                                                        <input type="checkbox"></input><label>Available</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>     */}
+                          </div>
+                                       
+                                           
                             </div>
                         </div>                                            
                     </div>

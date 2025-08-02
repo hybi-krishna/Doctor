@@ -5,28 +5,34 @@ import './login.css';
 
 const Login = ({ setIsAuthenticated }) => {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(""); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/login", { email, password });
-      alert(res.data.message);
-      localStorage.setItem("token", res.data.token);
-      
-      localStorage.setItem("userId", res.data.user._id);
+  e.preventDefault();
+  try {
+    const res = await axios.post("http://localhost:5000/login", { email, password });
+    alert(res.data.message);
 
-      
-      // ✅ Update authentication state
-      setIsAuthenticated(true);
+    // ✅ Store token
+    localStorage.setItem("token", res.data.token);
 
-      // ✅ Redirect to home page
-      navigate("/");
-    } catch (err) {
-      alert(err.response?.data?.error || "Login failed");
-    }
-  };
+    // ✅ Store full user object for future use
+    localStorage.setItem("user", JSON.stringify(res.data.user)); // <-- this line is missing in your code
+
+    // ✅ Optional: Still keep userId separately if needed
+    localStorage.setItem("userId", res.data.user._id);
+
+    // ✅ Update authentication state
+    setIsAuthenticated(true);
+
+    // ✅ Redirect to home
+    navigate("/");
+  } catch (err) {
+    alert(err.response?.data?.error || "Login failed");
+  }
+};
+
 
   return (
     <header>

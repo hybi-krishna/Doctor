@@ -47,9 +47,15 @@
 .all-row-1:hover{
     transform: translateY(-10px);
 }
+.link-no-style {
+  text-decoration: none;
+  color: inherit;
+}
+
 .all-row-1 div{
     padding: 16px;
     margin-bottom: 0;
+    
 }
 .all-row-1 div p{
     margin: 0;

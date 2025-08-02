@@ -18,17 +18,17 @@
     width: 180px;
     height: 38px;
 }
-.ap-nav p{
+.smallad{
     border: 1px solid rgb(102, 102, 102);
     border-radius: 50px;
-    width: 37px;
+    width: 47px;
     height: 16px;
+    justify-content: center;
+
+}
+.ap-nav p{
     font-size: 12px;
     color: rgb(102, 102, 102);
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-top: 2px;
-    padding-bottom: 2px;
     margin: 0;
 }
 .ap-nav button{
@@ -68,7 +68,7 @@
 }
 .ap-left p{
     color: rgb(76, 76, 76);
-
+    margin: 0;
 }
 .ap-blank{
     background-color: rgb(245, 246, 251);
@@ -98,27 +98,7 @@
     padding-left: 24px;
     padding-right: 24px;
 }
-.a-hash{
-    width: 44px;
-}
-.a-pat{
-    width: 264.5px;
-}
-.a-age{
-    width: 88px;
-}
-.a-time{
-    width: 264.5px;
-}
-.a-doc{
-    width: 264.5px;
-}
-.a-fee{
-    width: 88px;
-}
-.a-act{
-    width: 88px;
-}
+
 /* .add-up{
     background-color: white;
     width: 900px;

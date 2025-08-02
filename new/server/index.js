@@ -102,18 +102,6 @@ app.post("/create", async (req, res) => {
 });
 
 
-// GET user profile by ID
-// app.get("/api/users/:id", async (req, res) => {
-//   try {
-//     const user = await User.findById(req.params.id);
-//     if (!user) return res.status(404).json({ message: "User not found" });
-//     res.json(user);
-//   } catch (error) {
-//     console.error("Fetch error:", error);
-//     res.status(500).json({ message: "Failed to fetch user" });
-//   }
-// });
-
 // GET user profile by ID with token verification
 app.get("/api/users/:id", async (req, res) => {
   try {
@@ -130,7 +118,7 @@ app.get("/api/users/:id", async (req, res) => {
       return res.status(403).json({ message: "Forbidden" });
     }
 
-    // Fetch user from database
+    // Fetch user from database 
     const user = await User.findById(req.params.id); 
     if (!user) return res.status(404).json({ message: "User not found" });
 
@@ -138,7 +126,7 @@ app.get("/api/users/:id", async (req, res) => {
   } catch (error) {
     // console.error("Fetch error:", error);
     res.status(500).json({ message: "Failed to fetch user" });
-  }
+  } 
 });
 
 
@@ -257,54 +245,48 @@ app.post("/login", async (req, res) => {
 });
 
 
+//doctor login
+app.post("/doctor-login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-//adminlogin
-// app.post("/adminlogin", async (req, res) => {
-//   try {
-//       const { email, password } = req.body;
+        if (!email || !password) {
+            return res.status(400).json({ error: "All fields are required" });
+        }
 
-//       if (!email || !password) {
-//           return res.status(400).json({ error: "All fields are required" });
-//       }
+        // Check if user exists
+        const doctor = await User.findOne({ email });
+        if (!doctor) return res.status(400).json({ error: "doctor not found" });
 
-//       // Check if user exists
-//       const user = await Adminuser.findOne({ email });
-//       if (!user) return res.status(400).json({ error: "User not found" });
+        // Validate password
+        const validPassword = await bcrypt.compare(password, doctor.password);
+        if (!validPassword) return res.status(400).json({ error: "Invalid credentials" });
 
-//       // Validate password
-//       const validPassword = await bcrypt.compare(password, user.password);
-//       if (!validPassword) return res.status(400).json({ error: "Invalid credentials" });
+        // Generate JWT token
+        const token = jwt.sign({ id: doctor._id }, JWT_SECRET, { expiresIn: "1h" });
 
-//       // Generate JWT token
-//       const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
+        // res.json({ message: "Login successful", token });
+       
 
-//       res.json({ message: "Login successful", token });
-//   } catch (error) {
-//       console.error("Login Error:", error);
-//       res.status(500).json({ error: "Server error. Try again later." });
-//   }
-// });
+    } catch (error) {
+        console.error("Login Error:", error);
+        res.status(500).json({ error: "Server error. Try again later." });
+    }
+});
 
 app.post("/adminlogin", async (req, res) => {
   try {
     const { email, password } = req.body;
-
     if (!email || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
-
     const user = await Adminuser.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(400).json({ error: "User not found" });
-
     // Direct comparison (plain text - for dev only)
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword){
       return res.status(400).json({ error: "Invalid credentials" });
   }
-    // if (password !== user.password) {
-    //   return res.status(400).json({ error: "Invalid credentials" });
-    // }
-
     const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
 
     res.json({ message: "Login successful", token });
@@ -360,6 +342,127 @@ app.post("/api/add-doctor",upload.single("photo"), async (req, res) => {
         res.status(500).json({ message: "Error adding doctor", error });
     }
 });
+
+// Appointment
+const appointmentSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  doctorId: { type: mongoose.Schema.Types.ObjectId, ref: "Doctor", required: true },
+  day: { type: String, required: true },
+  time: { type: String, required: true },
+  reason: String,
+  status: { type: String, default: "Pending" }, // e.g., Pending, Confirmed, Cancelled
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Appointment = mongoose.model("Appointment", appointmentSchema);
+
+
+
+// const verifyUserToken = (req, res, next) => {
+//   const token = req.headers.authorization?.split(" ")[1]; // Expect: Bearer <token>
+//   if (!token) {
+//     return res.status(401).json({ message: "Access denied. No token provided." });
+//   }
+
+//   try {
+//     const decoded = jwt.verify(token, "your_jwt_secret"); // Replace with your secret
+//     req.user = decoded; // Add user payload to request
+//     next();
+//   } catch (err) {
+//     return res.status(400).json({ message: "Invalid token." });
+//   }
+// };
+app.post("/api/appointments", async (req, res) => {
+  try {
+    const { userId, doctorId, day, time, reason } = req.body;
+
+    if (!userId || !doctorId || !day || !time) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const newAppointment = new Appointment({
+      userId,
+      doctorId,
+      day,
+      time,
+      reason,
+    });
+
+    await newAppointment.save();
+    res.json({ success: true, appointment: newAppointment });
+  } catch (err) {
+    console.error("Error saving appointment:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+app.get("/api/appointments", async (req, res) => {
+  const { userId } = req.query;
+  if (!userId) return res.status(400).json({ message: "User ID required" });
+
+  try {
+    const appointments = await Appointment.find({ userId })
+      .populate("doctorId", "name speciality photo")
+      .sort({ createdAt: -1 });
+
+    res.json(appointments);
+  } catch (err) {
+    console.error("Error fetching appointments:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+//appintment cancellation
+app.delete("/api/cancel-appointment/:id", async (req, res) => {
+    try {
+      const appintmentId = req.params.id;
+      const cancelAppointment = await Appointment.findByIdAndDelete(appintmentId);
+  
+      if (!cancelAppointment) {
+        return res.status(404).json({ message: "Appointment not found" });
+      }
+  
+      res.json({ message: "Doctor deleted successfully" });
+    } catch (error) {
+      console.error("Delete Error:", error);
+      res.status(500).json({ message: "Failed to cancel appointment" });
+    }
+  });
+
+  //admin Appoointments
+ app.get("/api/adappointments", async (req, res) => {
+  try {
+    const appointments = await Appointment.find()
+      .populate("userId", "full_name birthday") 
+      .populate("doctorId", "name fees"); 
+
+    res.json(appointments);
+  } catch (error) {
+    console.error("Failed to fetch appointments:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+//time slote
+app.get("/api/booked-slots",async(req,res)=>{
+  const{doctorId ,day} = req.query;
+  try{
+    const appointments = await Appointment.find({doctorId,day});
+    const bookedTime = appointments.map(appt => appt.time);
+    res.json(bookedTime);
+  }
+  catch(err){
+    console.error("error fetching booked slots:",err);
+    res.status(500).send("server error");
+  }
+});
+
+
+
+
 
 // ✅ Start Server
 const PORT = 5000;
